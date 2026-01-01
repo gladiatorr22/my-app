@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 
 connect();
 
-export async function POST(request: NextRequest){
+export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json();
         const { email, password } = reqBody;
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest){
         }
 
         // create token
-        const token = jwt.sign(tokenData, process.env.NEXT_PUBLIC_JWT_SECRET!, {
+        const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {
             expiresIn: "1d",
         });
 
@@ -44,10 +44,10 @@ export async function POST(request: NextRequest){
         });
         response.cookies.set("token", token, {
             httpOnly: true,
-            
+
         });
         return response;
-    } catch (error:any) {
-         return NextResponse.json({error: error.message}, {status: 500})
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 })
     }
 }
