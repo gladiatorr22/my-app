@@ -2,7 +2,7 @@ import { connect } from "@/dbConfig/dbConfig";
 import User from "@models/userModel";
 import bcrypt from "bcryptjs";
 import { NextResponse, NextRequest } from "next/server";
-
+import { sendEmail } from "@/helpers/mailer";
 
 connect();
 
@@ -30,6 +30,11 @@ export async function POST(request: NextRequest) {
         });
 
         const savedUser = await newUser.save();
+
+        
+        await sendEmail({email, emailType: "VERIFY", userId: savedUser._id})
+
+
         return NextResponse.json({ message: "User created successfully", user: savedUser }, { status: 201 });
     } catch (error: any) {
         console.error("Error during signup:", error);
